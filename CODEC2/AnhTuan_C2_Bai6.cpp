@@ -1,4 +1,4 @@
-//bt6
+ //bt6
 #include <iostream>
 using namespace std;
 

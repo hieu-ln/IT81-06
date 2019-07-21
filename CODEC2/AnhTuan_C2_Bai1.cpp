@@ -3,7 +3,7 @@
 
 using namespace std;
 #define MAX 100
-//cau 1.1
+ //cau 1.1
 
 int a[MAX];
 int n;
