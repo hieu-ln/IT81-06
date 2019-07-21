@@ -1,4 +1,4 @@
-//Bt7
+ //Bt7
 #include <iostream>
 using namespace std;
 #define MAX 100

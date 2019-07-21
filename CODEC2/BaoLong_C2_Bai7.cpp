@@ -1,4 +1,4 @@
-//Bt7
+     //Bt7
 #include <iostream>
 using namespace std;
 #define MAX 100
@@ -23,7 +23,7 @@ int kTDay()
 	if(rear - front == MAX - 1)
 		return 1;
 	return 0;
-} 
+}
 
 int them1PT(int a[], int &front, int &rear, int x)
 {

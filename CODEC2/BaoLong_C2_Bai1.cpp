@@ -1,171 +1,188 @@
-//Bt1
 #include <iostream>
+#include<stdio.h>
+
 using namespace std;
 #define MAX 100
+//cau 1.1
+
 int a[MAX];
-int n;
+int n;   
 
-void nhap(int a[], int n);
-void xuat(int a[], int n);
-int timKiem(int a[], int n, int x);
-int themCuoi(int a[], int &n, int b);
-int xoaCuoi(int a[], int &n);
-int xoa(int a[], int &n, int vT);
-int timXoa(int a[], int &n, int x);
-
-int main()
+//cau1.2
+void input(int a[], int &n)
 {
-
-	int chon;
-	char tt;
-	do{
-		cout << "Nhap so luong phan tu can dung: ";
-		cin >> n;
-		if(n <= 0 || n > MAX)
-			cout << "Nhap sai. Hay nhap lai!\n";
-	}while(n <= 0 || n > MAX);
-	do{
-		system("cls");
-		cout << "1.Nhap\n2.Xuat\n3.Tim mot phan tu\n4.Them mot phan tu o cuoi\n5.Xoa mot phan tu o cuoi\n6.Xoa phan tu tai vi tri chi dinh\n7.Tim va xoa mot phan tu\nBan chon: ";
-		cin >> chon;
-		switch(chon)
-		{
-		case 1:
-			nhap(a, n);
-			cout << endl;
-			break;
-		case 2:
-			cout << "Danh sach cac phan tu hien tai: ";
-			xuat(a, n);
-			cout << endl;
-			break;
-		case 3:
-			int x;
-			cout << "Nhap so can tim: ";
-			cin >> x;
-			if(timKiem(a, n, x) == -1)
-				cout << x << " khong co trong danh sach\n";
-			else
-				cout << x << " co trong danh sach tai vi tri " << timKiem(a, n, x) << endl;
-			break;
-		case 4:
-			int gTThem;
-			cout << "Nhap gia tri them cuoi danh sach: ";
-			cin >> gTThem;
-			if(themCuoi(a, n, gTThem))
-			{
-				cout << "Danh sach sau khi them: ";
-				xuat(a, n);
-			}
-			else
-				cout << "Khong the them cuoi danh sach\n";
-			cout << endl;
-			break;
-		case 5:
-			if(xoaCuoi(a, n))
-			{
-				cout << "Danh sach sau khi xoa mot phan tu o cuoi: ";
-				xuat(a, n);
-				cout << endl;
-			}
-			else
-				cout << "Khong the xoa\n";
-			break;
-		case 6:
-			int b;
-			cout << "Nhap vi tri can xoa: ";
-			cin >> b;
-			if(xoa(a, n, b))
-			{
-				cout << "Danh sach sau khi xoa: ";
-				xuat(a, n);
-				cout << endl;
-			}
-			else
-				cout << "Khong the xoa\n";
-			break;
-		case 7:
-			int c;
-			cout << "Nhap gia tri can tim de xoa: ";
-			cin >> c;
-			if(timXoa(a, n, c))
-			{
-				cout << "Danh sach sau khi xoa phan tu can tim: ";
-				xuat(a, n);
-				cout << endl;
-			}
-			else
-				cout << c << " khong co trong danh sach\n";
-		}
-		break;
-		cout << "Ban co muon tiep tuc khong(y/n): ";
-		cin >> tt;
-	}while(tt == 'Y' || tt == 'y');
-	return 0;
-}
-
-void nhap(int a[], int n)
-{
-	for (int i = 0; i < n; i++)
+	cout << "Nhap so phan tu cua danh sach: ";
+	cin >> n;
+	cout << "Nhap cac phan tu cua danh sach: ";
+	for (int i = 0; i<n; i++)
 	{
-		cout << "Nhap phan tu thu " << i + 1 << " : ";
+		cout << "a[" << i + 1 << "]";
 		cin >> a[i];
 	}
 }
 
-void xuat (int a[], int n)
+//1.3
+void output(int a[], int n)
 {
-	for(int i = 0; i < n; i++)
-		cout << a[i] << " ";
+	for (int i = 0; i<n; i++)
+		cout << a[i] << "\t";
+	cout << endl;
 }
 
-int timKiem(int a[], int n, int x)
+//1.4
+int search(int a[], int n, int x)
 {
-	int i = 0;
-	while((i < n) && (a[i] != x))
-		i++;
-	if(i == n)
-		return -1;
-	return i;
-}
-
-int themCuoi(int a[], int &n, int b)
-{
-	if(n > 0 && n < MAX)
+	for (int i = 0; i<n; i++)
 	{
-		a[n] = b;
+		if (a[i] == x)
+			return i;
+	}
+	return -1;
+}
+
+//1.5
+int insert_last(int a[], int &n, int x)
+{
+	if (n<MAX)
+	{
+		a[n] = x;
 		n++;
 		return 1;
 	}
-	return 0;
-}
-
-int xoaCuoi(int a[], int &n)
-{
-	if(n > 0)
-	{
-		n--;
-		return 1;
-	}
-	return 0;
-}
-
-int xoa(int a[], int &n, int vT)
-{
-	if(vT >= 0 && vT < n)
-	{
-		for(int i = vT; i < n - 1; i++)
-			a[i] = a[i + 1];
-		n--;
-		return 1;
-	}
-	return 0;
-}
-
-int timXoa(int a[], int &n, int x)
-{
-	if(timKiem(a, n, x) == -1)
+	else
 		return 0;
-	if(xoa(a, n, timKiem(a, n, x)))
+}
+
+//1.6
+int delete_last(int a[], int &n)
+{
+	if (n>0)
+	{
+		n--;
 		return 1;
+	}
+	return 0;
+}
+
+//1.7
+int Delete(int a[], int &n, int i)
+{
+	if (i >= 0 && i<n)
+	{
+		for (int j = i; j<n - 1; j++)
+			a[j] = a[j + 1];
+		n--;
+		return 1;
+	}
+	return 0;
+}
+
+//1.8
+int searchAndDelete(int a[], int &n, int x)
+{
+	for (int i = 0; i<n; i++)
+	{
+		if (a[i] == x)
+		{
+			Delete(a, n, i);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int main()
+{
+	int choice = 0;
+	int x, i;
+	system("cls");
+	cout << "----------- BAI TAP 1,	CHUONG 1, DANH SACH DAC ------------" << endl;
+	cout << "1/Nhap danh sach" << endl;
+	cout << "2/Xuat danh sach" << endl;
+	cout << "3/Tim phan tu co gia tri x trong danh sach" << endl;
+	cout << "4/Them phan tu vao cuoi danh sach" << endl;
+	cout << "5/Xoa phan tu cuoi danh sach" << endl;
+	cout << "6/Xoa phan tu tai vi tri i" << endl;
+	cout << "7/Tim phan tu voi gia tri x va xoa neu co" << endl;
+	cout << "8/Thoat" << endl;
+	do
+	{
+		cout << "Vui long chon so de thuc hien: ";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			input(a, n);
+			cout << "Ban vua nhap danh sach thanh cong!\n";
+			break;
+		case 2:
+			cout << "Danh sach da nhap la: \n";
+			output(a, n);
+			break;
+		case 3:
+			cout << "nhap phan tu x can tim: ";
+			cin >> x;
+			i = search(a, n, x);
+			if (i == -1)
+				cout << "khong tim thay phan tu x trong danh sach!\n";
+			else
+				cout << "tim thay phan tu x trong danh sach tai vi tri i=" << i << endl;
+		case 4:
+			cout << "Vui long nhap x can them vao cuoi ds: ";
+			cin >> x;
+			i = insert_last(a, n, x);
+			if (i == 0)
+				cout << "Danh sach da day, khong the them! " << x << endl;
+			else
+			{
+				cout << "Da them phan tu x= " << x << " vao cuoi danh sach!" << endl;
+				cout << "Ds sau khi them la: \n";
+				output(a, n);
+			}
+			break;
+		case 5:
+			i = delete_last(a, n);
+			if (i>0)
+			{
+				cout << "Xoa thanh cong !" << endl;
+				cout << "Danh sach sau khi xoa phan tu cuoi la: \n";
+				output(a, n);
+			}
+			else
+				cout << "Danh sach dang rong, khong co phan tu nao!!!" << endl;
+		case 6:
+			cout << "Vui long nhap vi tri can xoa i=";
+			cin >> i;
+			i = Delete(a, n, i);
+			if (i == 1)
+			{
+				cout << "Xoa thanh cong !" << endl;
+				cout << "Danh sach sau khi xoa la:\n";
+				output(a, n);
+			}
+			else
+				cout << "Khong co phan tu nao de xoa!!!" << endl;
+			break;
+		case 7:
+			cout << "Vui long nhap gia tri can xoa x=";
+			cin >> x;
+			i = searchAndDelete(a, n, x);
+			if (i == 1)
+			{
+				cout << "Xoa thanh cong phan tu co gia tri x=" << x << endl;
+				cout << "Danh sach sau khi xoa la: \n";
+				output(a, n);
+			}
+			else
+				cout << "Khong co phan tu nao de xoa!!!" << endl;
+			break;
+		case 8:
+			cout << "\nGoodBye!";
+			break;
+		default:
+			break;
+		}
+	} while (choice != 8);
+	system("pause");
+	return 0;
 }

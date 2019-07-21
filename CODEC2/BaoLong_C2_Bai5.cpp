@@ -1,11 +1,10 @@
-//Bt5
+     //Bt5
 #include <iostream>
 using namespace std;
 
 #define MAX 100
 int a[MAX];
 int sp;
-
 
 void khoiTao(int a[], int &sp)
 {

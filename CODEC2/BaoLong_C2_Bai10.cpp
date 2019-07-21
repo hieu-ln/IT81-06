@@ -1,4 +1,4 @@
-//Bt10;
+       //Bt10;
 #include <iostream>
 using namespace std;
 
@@ -8,7 +8,7 @@ struct Node
 	Node *link;
 };
 
-Node *sp;   
+Node *sp;
 
 void init()
 {
@@ -88,7 +88,7 @@ int main()
 			cout << "Nhap gia tri phan tu can them: ";
 			cin >> x;
 			Push(x);
-			cout << "Them thanh con\n";
+			cout << "Them thanh cong\n";
 			break;
 		case 4:
 			int y;
