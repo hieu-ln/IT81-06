@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 using namespace std;
-//11.1: Khao bao cau truc queue
+ //11.1: Khao bao cau truc queue
 struct Node{
 	int info;
 	Node *link;
