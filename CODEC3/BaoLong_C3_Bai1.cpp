@@ -1,239 +1,352 @@
-//bt01
 #include <iostream>
+#include <ctime>
 using namespace std;
-#define MAX 100
-int a[MAX];
-int n;
 
-void nhap(int a[], int n)
+//cau 1.1
+#define MAX 3000
+int a[MAX], n;
+
+//cau 1.2
+void init(int a[], int &n)
 {
+	cout << "Nhap so luong phan tu danh sach: ";
+	cin >> n;
+	for(int i = 0; i < n; i++)
+		a[i] = rand() % 10000 + 1;
+	cout << "Danh sach da duoc tao ngau nhien nhu sau: " << endl;
+	for(int i = 0; i < n; i++)
+		cout << a[i] << " ";
+	cout << endl;
+}
+
+void input(int a[], int &n)
+{
+	cout << "Nhap so luong phan tu danh sach";
+	cin >> n;
+	cout << "Nhap vao cac phan tu danh sach";
 	for(int i = 0; i < n; i++)
 	{
-		cout << "Nhap a[" << i << "] :";
+		cout << "a[" << i << "] = ";
 		cin >> a[i];
 	}
 }
 
-void xuat(int a[], int n)
+//cau 1.3
+void output(int a[], int n)
+{
+	for(int i = 0; i< n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+}
+
+void copyArray(int a[], int b[], int n)
 {
 	for(int i = 0; i < n; i++)
-		cout << a[i] << endl;
+		b[i] = a[i];
 }
 
-void InsertionSort(int a[], int n)
+//cau 1.4
+void insertionSort(int a[], int n)
 {
-	int x, i, j;
+	int i, key, j;
 	for(i = 1; i < n; i++)
 	{
-		x = a[i];
+		key = a[i];
 		j = i - 1;
-		while(0 <= j && x < a[j])
+		while (j >= 0 && a[j] > key)
 		{
 			a[j + 1] = a[j];
-			j--;
+			j = j - 1;
 		}
-		a[j + 1] = x;
+		a[j + 1] = key;
 	}
 }
 
+// ham hoan doi
 void swap(int &a, int &b)
 {
-	int c;
-	c = a;
+	int t = a;
 	a = b;
-	b = c;
+	b = t;
 }
+
+//Cau 1.5
 void SelectionSort(int a[], int n)
 {
-	int min_pos, i, j;
+	int i, j, min_idx;
 	for(i = 0; i < n - 1; i++)
 	{
-		min_pos = i;
+		min_idx = i; 
 		for(j = i + 1; j < n; j++)
-			if(a[j] < a[min_pos])
-				min_pos = j;
-		swap(a[min_pos], a[i]);
+			if(a[j] < a[min_idx])
+				min_idx = j;
+		swap(a[min_idx], a[i]);
 	}
 }
 
-void BubbleSort(int a[], int n)
+// cau 1.6
+void interchangeSort(int a[], int n)
 {
-	for(int i = 0; i < n - 1; i++)
-		for(int j = n - 1; j > i; j--)
-			if(a[j - 1] > a[j])
-				swap(a[j], a[j - 1]);
-}
-
-void InterchangeSort(int a[], int n)
-{
-	for(int i = 0; i < n - 1; i++)
+	for(int i = 0; i < n; i++)
 		for(int j = i + 1; j < n; j++)
 			if(a[i] > a[j])
 				swap(a[i], a[j]);
 }
 
-void QuickSort(int a[], int left, int right)
+// cau 1.7
+void BubbleSort(int a[], int n)
 {
-	int x = a[(left + right) / 2];
-	int i = left;
-	int j = right;
-	while(i < j)
+	int i, j;
+	bool haveSwap = false;
+	for(i = 0; i < n; i++)
 	{
-		while(a[i] < x)
-			i++;
-		while(a[j] > x)
-			j--;
-		if(i <= j)
+		haveSwap = false;
+		for(j = 0; j < n - i - 1; j++)
 		{
-			swap(a[i], a[j]);
-			i++; 
-			j--;
+			if(a[j] > a[j + 1])
+			{
+				swap(a[j], a[j + 1]);
+				haveSwap = true;
+			}
 		}
+		if(haveSwap == false)
+			break;
 	}
-	if(left < j)
-		QuickSort(a, left, j);
-	if(i < right)
-		QuickSort(a, i, right);
 }
 
-void shift(int a[], int i, int n)
+// cau 1.8
+int Partition(int a[], int low, int high)
 {
-	int j = 2 * i + 1;
-	if(j >= n)
-		return;
-	if(j + 1 < n)
-		if(a[j] <  a[j + 1])
-			j++;
-	if(a[i] >= a[j])
-		return;
-	else
+	int pivot = a[high];
+	int left = low;
+	int right = high - 1;
+	while (true)
 	{
-		int x = a[i];
-		a[i] = a[j];
-		a[j] = x;
-		shift(a, j, n);
+		while(left <= right && a[left] < pivot)
+			left++;
+		while (right >= left && a[right] > pivot)
+			right--;
+		if(left >= right)
+			break;
+		swap(a[left], a[right]);
+		left++;
+		right--;
+	}
+	swap(a[left], a[high]);
+	return left;
+}
+
+void QuickSort(int a[], int low, int high)
+{
+	if(low < high)
+	{
+		int pi = Partition(a, low, high);
+		QuickSort(a, low, pi - 1);
+		QuickSort(a, pi + 1, high);
+	}
+}
+
+// cau 1.9
+void Heapify(int a[], int n, int i)
+{
+	int largest = i; 
+	int l = 2*i + 1;
+	int r = 2*i + 2;
+	if(l < n && a[l] > a[largest])
+		largest = l;
+	if(r < n && a[r] > a[largest])
+		largest = r;
+	if(largest != i)
+	{
+		swap(a[i], a[largest]);
+		Heapify(a, n, largest);
 	}
 }
 
 void HeapSort(int a[], int n)
 {
-	int i = n / 2;
-	while(i >= 0)
+	for(int i = n/2 - 1; i >= 0; i--)
+		Heapify(a, n, i);
+	for(int j = n - 1; j >= 0; j--)
 	{
-		shift(a, i, n - 1);
-		i--;
+		swap(a[0], a[j]);
+		Heapify(a, j, 0);
 	}
-	int right = n - 1;
-	while(right > 0)
-	{
-		swap(a[0], a[right]);
-		right--;
-		if(right > 0)
-			shift(a, 0, right);
-	}
-}
-int Search(int a[], int n, int x)
-{
-	int i = 0;
-	while(i < n && a[i] != x)
-		i++;
-	if(i < n)
-		return i;
-	return -1;
 }
 
-int BinarySearch(int a[], int n, int x)
+// cau 1.10
+void SearchSequence(int a[], int n, int x)
 {
-	int left = 0, right = n - 1, mid;
-	while(left <= right)
+	int i = 0; 
+	while (i < n && a[i] != x)
 	{
-		mid = (left + right) / 2;
+		i++;
+	}
+	if(i == n)
+	{
+		cout << "khong tim thay";
+	}
+	else
+		cout << "Tim thay tai vi tri " << i;
+}
+
+// cau 1.11
+int searchBinary(int a[], int l, int r, int x)
+{
+	if(r >= l)
+	{
+		int mid = l + (r - l) / 2;
 		if(a[mid] == x)
 			return mid;
-		if(x > a[mid])
-			left = mid + 1;
-		else
-			right = mid - 1;
+		if(a[mid] > x)
+			return searchBinary(a, l, mid - 1, x);
+		return searchBinary(a, mid + 1, r, x);
 	}
 	return -1;
 }
 
 int main()
 {
-	int chon;
-	char tt;
-	do{
-		cout << "Nhap so luong phan tu danh sach dac: ";
-		cin >> n;
-		if(n <= 0 || n > MAX)
-			cout << "Nhap sai quy dinh so luong phan tu danh sac dac\n";
-	} while(n <= 0 || n > MAX);
-	int left = 0;
-	int right = n - 1;
-	do{
-		system("cls");
-		cout << "1.Nhap danh sach\n2.Xuat danh sach\n3.Sap xep theo InsertionSort\n4.Sap xep theo SelectionSort\n5.Sap xep theo InterchangeSort\n6.Sap xep theo BubbleSort\n7.Sap xep theo QuickSort\n8.Sap xep theo HeapSort\n9.Tim kiem tuan tu\n10.Tim kiem nhi phan\nBan chon: ";
-		cin >> chon;
-		switch(chon)
+	int b[MAX];
+	clock_t start;
+	double duration;
+	int choice, x, i;
+	cout << "---------BAI TAP CHUONG 3, XEP THU TU  va TIM KIEM ----------" << endl;
+	cout << "1. Nhap danh sach" << endl;
+	cout << "2. Xuat danh sach" << endl;
+	cout << "3. Xep thu tu danh sach bang SELECTION SORT" << endl;
+	cout << "4. Xep thu tu danh sach bang INSERTION SORT" << endl;
+	cout << "5.Xep thu tu danh sach bang BUBBLE SORT" << endl;
+	cout << "6.Xep thu tu danh sach bang INTERCHANGE SORT" << endl;
+	cout << "7.Xep thu tu danh sach bang QUICK SORT" << endl;
+	cout << "8.Xep thu tu danh sach bang HEAP SORT" << endl;
+	cout << "9.Tim kiem phan tu x bang TIM KIEM TUAN TU" << endl;
+	cout << "10.Tim kiem phan tu x bang TIM KIEM NHI PHAN" << endl;
+	cout << "11.Thoat" << endl;
+	do {
+		cout << "\nVui long chon so de thuc hien: ";
+		cin >> choice;
+		switch (choice)
 		{
+		case 0:
+			init(a, n);
+			break;
 		case 1:
-			nhap(a, n);
+			input(a, n);
 			break;
 		case 2:
-			cout << "Danh sach dac hien tai la: \n";
-			xuat(a, n);
+			cout << "Danh sach la: " << endl;
+			output(a, n);
 			break;
 		case 3:
-			InsertionSort(a, n);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap InsertionSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			SelectionSort(b, n);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "DS sau khi xep thu tu voi SELECTION SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian SELECTION SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 4:
-			SelectionSort(a, n);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap SelectionSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			insertionSort(b, n);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "DS sau khi xep thu tu voi INSERTION SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian INSERTION SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 5:
-			InterchangeSort(a, n);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap InterchangeSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			BubbleSort(b, n);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "Ds sau khi xep thu tu voi BUBBLE SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian BUBBLE SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 6:
-			BubbleSort(a, n);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap BubbleSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			interchangeSort(b, n);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "DS sau khi xep thu tu voi INTERCHANGE SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian INTERCHANGE SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 7:
-			QuickSort(a, left, right);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap QuickSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			QuickSort(b, 0, n - 1);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "DS sau khi xep thu tu voi QUICK SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian QUICK SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 8:
-			HeapSort(a, n);
-			cout << "Danh sach sau khi sap xep tang dan bang phuong phap HeapSort:\n";
-			xuat(a, n);
+			copyArray(a, b, n);
+			start = clock();
+			HeapSort(b, n);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (n < 100)
+			{
+				cout << "DS sau khi xep thu tu voi HEAP SORT la: " << endl;
+				output(b, n);
+			}
+			if (duration > 0)
+				cout << "Thoi gian HEAP SORT: " << duration * 1000000 << " Microseconds" << endl;
 			break;
 		case 9:
-			int x;
-			cout << "Ban muon tim kiem so nao trong danh sac dac: ";
+			cout << "Vui long nhap gia tri x=";
 			cin >> x;
-			if(Search(a, n, x) == -1)
-				cout << " Khong tim thay " << x << " trong danh sach dac " << endl;
-			else
-				cout << x << " co trong ds va nam o vi tri " << Search(a, n, x) << endl;
+			start = clock();
+			SearchSequence(a, n, x);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (duration > 0)
+				cout << "\n-Thoi gian tim kiem TUAN TU la: " << duration * 1000000 << " Microseconds" << endl;
 			break;
+
 		case 10:
-			int y;
-			cout << "Ban muon tim kiem so nao trong danh sach dac: ";
-			cin >> y;
-			if(BinarySearch(a, n, y) == -1)
-				cout << "Khong tim thay " << y << " trong danh sach dac " << endl;
+			cout << "Vui long nhap gia tri x = ";
+			cin >> x;
+			start = clock();
+			i = searchBinary(b, 0, n, x);
+			duration = (clock() - start) / (double)CLOCKS_PER_SEC;
+			if (i == -1)
+				cout << "Khong tim thay x=" << x << " trong day !" << endl;
 			else
-				cout << y << " co trong ds va nam o vi tri " << BinarySearch(a, n, y) << endl;
+				cout << "Tim thay x=" << x << " tai vi tri i=" << i << endl;
+			if (duration > 0)
+				cout << "\nThoi gian tim kiem NHI PHAN la: " << duration * 1000000 << " Microseconds" << endl;
+			break;
+		case 11:
+			cout << "Goodbye...!" << endl;
+			break;
+		default:
 			break;
 		}
-		cout << "Ban co muon tiep tuc(y/n): ";
-		cin >> tt;
-	} while(tt == 'y' || tt == 'Y');
+	} while (choice != 11);
 	return 0;
 }
